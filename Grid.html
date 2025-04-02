@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUROiTECH - Patient Registration</title>
+    <!-- Import Poppins font from Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9fc;
+            color: #333;
+            font-size: 13px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+        
+        header {
+            background-color: #ffffff;
+            padding: 6px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            font-weight: 500;
+        }
+        
+        .logo {
+            height: 28px;
+            width: auto;
+        }
+        
+        .date {
+            font-size: 14px;
+            color: #1c87b9;
+            font-weight: 500;
+        }
+        
+        /* Navigation Bar Styles */
+        nav {
+            background-color: #1c87b9;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        nav ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        nav li {
+            flex: 1;
+            position: relative;
+        }
+        
+        nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 5px 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            font-size: 12.5px;
+        }
+        
+        nav li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        nav li a:hover::after {
+            width: 80%;
+        }
+        
+        nav li a:hover {
+            background-color: #146a8f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        nav li a.active {
+            background-color: #146a8f;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+        
+        nav li a.active::after {
+            width: 80%;
+            background-color: white;
+        }
+        
+        /* Patient Form Styles */
+        .form-container {
+            flex: 1;
+            margin: 8px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-tabs {
+            display: flex;
+            background: #f0f7fc;
+            border-bottom: 1px solid #e0e8f0;
+            min-height: 36px;
+        }
+        
+        .form-tab {
+            padding: 8px 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #555;
+            font-size: 12px;
+            position: relative;
+        }
+        
+        .form-tab.active {
+            background: white;
+            color: #1c87b9;
+            border-bottom: 3px solid #1c87b9;
+        }
+        
+        .form-tab:hover:not(.active) {
+            background: #e8f4fc;
+        }
+        
+        .photo-btn {
+            margin-left: auto;
+            padding: 6px 12px;
+            background: #1c87b9;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            margin-right: 10px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        
+        .photo-btn:hover {
+            background: #146a8f;
+            transform: translateY(-1px);
+        }
+        
+        .form-content {
+            padding: 12px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 12px;
+            overflow-y: auto;
+            max-height: calc(100vh - 180px);
+        }
+        
+        .tile {
+            background: #f9fbfd;
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #e0e8f0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: all 0.2s;
+        }
+        
+        .tile:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            border-color: #cde0f0;
+        }
+        
+        .tile-header {
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e0e8f0;
+            color: #1c87b9;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tile-header i {
+            font-size: 14px;
+        }
+        
+        .tile-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-gap: 10px;
+        }
+        
+        .form-group {
+            min-width: 0;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .form-group label {
+            position: absolute;
+            top: -5px;
+            left: 10px;
+            background-color: #f9fbfd;
+            padding: 0 6px;
+            font-weight: 500;
+            color: #555;
+            font-size: 12px;
+            z-index: 1;
+            line-height: 1;
+            transition: all 0.2s;
+        }
+        
+        .tile:hover .form-group label {
+            color: #1c87b9;
+        }
+        
+        .form-group label .required {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            height: 36px;
+            background-color: #fff;
+        }
+        
+        .form-control:focus {
+            border-color: #1c87b9;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(28, 135, 185, 0.1);
+            background-color: #f0f9ff;
+        }
+        
+        .form-control:hover:not(:focus) {
+            border-color: #b8d0e0;
+        }
+        
+        /* Validation indicator */
+        .form-group.validated .form-control {
+            padding-right: 35px;
+            border-color: #4CAF50;
+        }
+        
+        .validation-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CAF50;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .form-group.validated .validation-icon {
+            display: block;
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8.825L1.175 4 2.05 3.125 6 7.075 9.95 3.125 10.825 4 6 8.825z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
+        }
+        
+        .auto-gen {
+            background-color: #f7f7f7;
+            color: #777;
+        }
+        
+        .small-input {
+            width: 50px;
+            text-align: center;
+        }
+        
+        /* Checkbox field styling */
+        .checkbox-field {
+            position: relative;
+            padding-top: 0;
+            min-height: 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px 40px 8px 12px;
+            transition: all 0.3s;
+        }
+        
+        .checkbox-field:hover {
+            border-color: #b8d0e0;
+        }
+        
+        .checkbox-field label {
+            position: relative;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 0;
+            display: block;
+            font-size: 12px;
+            color: #555;
+            font-weight: 400;
+        }
+        
+        .checkbox-container {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+        }
+        
+        /* Custom checkbox styling */
+        .checkbox-container input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 3px;
+            outline: none;
+            transition: all 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .checkbox-container input[type="checkbox"]:checked {
+            background-color: #1c87b9;
+            border-color: #1c87b9;
+        }
+        
+        .checkbox-container input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: -2px;
+            left: 2px;
+        }
+        
+        .checkbox-container input[type="checkbox"]:hover {
+            border-color: #1c87b9;
+        }
+        
+        /* Radio field styling */
+        .radio-field {
+            position: relative;
+            margin-bottom: 8px;
+        }
+        
+        .radio-field label {
+            position: relative;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 6px;
+            display: block;
+            font-size: 12px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px 12px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .radio-option label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        
+        /* Custom radio button styling */
+        .radio-option input[type="radio"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            outline: none;
+            transition: all 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .radio-option input[type="radio"]:checked {
+            border-color: #1c87b9;
+        }
+        
+        .radio-option input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #1c87b9;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .radio-option input[type="radio"]:hover {
+            border-color: #1c87b9;
+        }
+        
+        .fee-input {
+            display: flex;
+            align-items: center;
+        }
+        
+        .fee-input input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .fee-input button {
+            background: #1c87b9;
+            color: white;
+            border: none;
+            height: 36px;
+            width: 36px;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f0f7fc;
+            border-top: 1px solid #e0e8f0;
+        }
+        
+        .btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn i {
+            font-size: 13px;
+        }
+        
+        .btn-primary {
+            background: #1c87b9;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #146a8f;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-secondary {
+            background: #e4e4e4;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-info {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d35400;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* Spacer for flex layouts */
+        .spacer {
+            flex: 1;
+        }
+        
+        .col-span-2 {
+            grid-column: span 2;
+        }
+        
+        /* Photo modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            width: 320px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .close {
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .photo-identity {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            margin: 8px 0;
+            height: 200px;
+        }
+        
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            background-color: #eee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        
+        .avatar-placeholder i {
+            font-size: 50px;
+            color: #bbb;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        /* Age input with YMD layout */
+        .age-input-container {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 0px;
+        }
+        
+        .age-input {
+            width: 40px;
+            text-align: center;
+            padding: 8px 5px;
+        }
+        
+        .age-label {
+            font-size: 12px;
+            color: #555;
+        }
+        
+        /* Footer styles */
+        .footer {
+            background-color: #f0f7fc;
+            padding: 6px 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+            border-top: 1px solid #e0e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: #1c87b9;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: #146a8f;
+            text-decoration: underline;
+        }
+        
+        /* Ensure no scrollbars */
+        .form-content {
+            overflow-y: auto;
+            max-height: calc(100vh - 180px);
+            padding-bottom: 5px;
+        }
+        
+        /* Specific to checkboxes and radios */
+        input[type="checkbox"], input[type="radio"] {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+        
+        /* Responsive adjustments for different screen sizes */
+        @media screen and (max-height: 768px) {
+            .form-content {
+                grid-gap: 10px;
+                padding: 10px;
+            }
+            
+            .tile {
+                padding: 8px;
+            }
+            
+            .tile-content {
+                grid-gap: 8px;
+            }
+        }
+        
+        @media screen and (max-height: 680px) {
+            body {
+                font-size: 12px;
+            }
+            
+            .header {
+                padding: 4px 20px;
+            }
+            
+            .logo {
+                height: 24px;
+            }
+            
+            .form-control {
+                height: 32px;
+                padding: 6px 8px;
+            }
+            
+            .checkbox-field, .radio-group {
+                min-height: 32px;
+                padding: 6px 40px 6px 12px;
+            }
+            
+            .fee-input button {
+                height: 32px;
+                width: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="AuroiTech_logo.png" alt="AUROiTECH Logo" class="logo">
+        </div>
+        <div class="date" id="current-date"></div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#" class="active">Patient Registration</a></li>
+            <li><a href="#">Appointments</a></li>
+            <li><a href="#">Medical Records</a></li>
+            <li><a href="#">Billings</a></li>
+            <li><a href="#">Reports</a></li>
+        </ul>
+    </nav>
+    
+    <div class="form-container">
+        <div class="form-tabs">
+            <div class="form-tab active">Patient Information</div>
+            <div class="photo-btn" id="open-photo-modal">
+                <i class="fas fa-camera"></i> Patient Photo
+            </div>
+        </div>
+        
+        <div class="form-content">
+            <!-- Registration Details Tile -->
+            <div class="tile">
+                <div class="tile-header">
+                    <i class="fas fa-clipboard-list"></i> Registration Details
+                </div>
+                <div class="tile-content">
+                    <div class="form-group">
+                        <label>Patient Instance</label>
+                        <select class="form-control">
+                            <option selected>New</option>
+                            <option>Returning</option>
+                            <option>Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Pay/Free</label>
+                        <select class="form-control">
+                            <option selected>PAY</option>
+                            <option>FREE</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Patient Type</label>
+                        <select class="form-control">
+                            <option selected>DIRECT</option>
+                            <option>REFERRAL</option>
+                            <option>EMERGENCY</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>UPIN</label>
+                        <input type="text" class="form-control auto-gen" value="Auto-generated" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>MRN</label>
+                        <input type="text" class="form-control auto-gen" value="Auto-generated" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Allocation</label>
+                        <select class="form-control">
+                            <option selected>Select</option>
+                            <option>General</option>
+                            <option>Special</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personal Information Tile -->
+            <div class="tile">
+                <div class="tile-header">
+                    <i class="fas fa-user"></i> Personal Information
+                </div>
+                <div class="tile-content">
+                    <div class="form-group validated">
+                        <label>First Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" value="Alfred" required>
+                        <i class="fas fa-check validation-icon"></i>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Gender <span class="required">*</span></label>
+                        <select class="form-control">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>DOB</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Age <span class="required">*</span></label>
+                        <div class="age-input-container">
+                            <input type="text" class="form-control age-input" placeholder="">
+                            <span class="age-label">Y</span>
+                            <input type="text" class="form-control age-input" placeholder="">
+                            <span class="age-label">M</span>
+                            <input type="text" class="form-control age-input" placeholder="">
+                            <span class="age-label">D</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Next of Kin <span class="required">*</span></label>
+                        <select class="form-control">
+                            <option selected>Select</option>
+                            <option>Father</option>
+                            <option>Mother</option>
+                            <option>Spouse</option>
+                            <option>Son</option>
+                            <option>Daughter</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Address Information Tile -->
+            <div class="tile">
+                <div class="tile-header">
+                    <i class="fas fa-map-marker-alt"></i> Address Information
+                </div>
+                <div class="tile-content">
+                    <div class="form-group">
+                        <label>Door/Street</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Locality</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>City / Area</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>PIN Code</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Taluk <span class="required">*</span></label>
+                        <select class="form-control">
+                            <option selected>Select</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>District</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information Tile -->
+            <div class="tile">
+                <div class="tile-header">
+                    <i class="fas fa-phone-alt"></i> Contact Information
+                </div>
+                <div class="tile-content">
+                    <div class="form-group">
+                        <label>Mobile No</label>
+                        <input type="tel" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone No</label>
+                        <input type="tel" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Aadhaar No</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group radio-field">
+                        <label>Mobile App Consent <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="consent-no" name="app-consent" checked>
+                                <label for="consent-no">No</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="consent-yes" name="app-consent">
+                                <label for="consent-yes">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Consent Mobile No</label>
+                        <input type="tel" class="form-control">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visit Information Tile -->
+            <div class="tile col-span-2">
+                <div class="tile-header">
+                    <i class="fas fa-stethoscope"></i> Visit Information
+                </div>
+                <div class="tile-content">
+                    <div class="form-group">
+                        <label>Purpose Of Visit <span class="required">*</span></label>
+                        <select class="form-control">
+                            <option>Regular Investigation - Units</option>
+                            <option>Consultation</option>
+                            <option>Follow-up</option>
+                            <option>Surgery</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Language Translate</label>
+                        <input type="text" class="form-control auto-gen" value="Auto-generated" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>MR Location</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Normal/Referral <span class="required">*</span></label>
+                        <select class="form-control">
+                            <option selected>Normal</option>
+                            <option>Referral</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group checkbox-field">
+                        <label>Have you ever registered before in any branch?</label>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="registered-before">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option selected>Select</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group checkbox-field">
+                        <label>Assign Doctor</label>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="assign-doctor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Information Tile -->
+            <div class="tile col-span-2">
+                <div class="tile-header">
+                    <i class="fas fa-credit-card"></i> Payment Information
+                </div>
+                <div class="tile-content">
+                    <div class="form-group">
+                        <label>Patient Category</label>
+                        <select class="form-control">
+                            <option selected>FULL PAYMENT</option>
+                            <option>PARTIAL PAYMENT</option>
+                            <option>INSURANCE</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Patient Sub Category</label>
+                        <select class="form-control">
+                            <option selected>Select</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Payment Type</label>
+                        <select class="form-control">
+                            <option selected>CASH</option>
+                            <option>CARD</option>
+                            <option>UPI</option>
+                            <option>INSURANCE</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Fees</label>
+                        <div class="fee-input">
+                            <input type="text" class="form-control" value="100">
+                            <button type="button">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group checkbox-field">
+                        <label>Do you have any health insurance subscription?</label>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="insurance">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option selected>Select</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
+            <button type="button" class="btn btn-secondary"><i class="fas fa-redo"></i> Recall</button>
+            <button type="button" class="btn btn-secondary"><i class="fas fa-print"></i> Reprint</button>
+            <button type="button" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</button>
+            <button type="button" class="btn btn-warning"><i class="fas fa-route"></i> Route card</button>
+            <div class="spacer"></div>
+            <button type="button" class="btn btn-info"><i class="fas fa-list"></i> View Collection</button>
+            <button type="button" class="btn btn-info"><i class="fas fa-upload"></i> Unit Load</button>
+        </div>
+        
+        <!-- Added footer -->
+        <div class="footer">
+            <p>AuroiTech - Hospital Management System © 2025. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Help</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Photo Modal -->
+    <div id="photo-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Patient Photo</h3>
+                <span class="close" id="close-photo-modal">&times;</span>
+            </div>
+            <div class="photo-identity">
+                <div class="avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span>Click to upload</span>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-photo">Cancel</button>
+                <button class="btn btn-primary">Save Photo</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript to display the current date
+        function formatDate(date) {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return date.toLocaleDateString('en-US', options);
+        }
+        
+        document.getElementById('current-date').textContent = formatDate(new Date());
+        
+        // Form tab switching
+        const tabs = document.querySelectorAll('.form-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Photo modal functionality
+        const modal = document.getElementById('photo-modal');
+        const openModalBtn = document.getElementById('open-photo-modal');
+        const closeModalBtn = document.getElementById('close-photo-modal');
+        const cancelBtn = document.getElementById('cancel-photo');
+        
+        openModalBtn.addEventListener('click', function() {
+            modal.style.display = 'flex';
+        });
+        
+        closeModalBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        cancelBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Set initial values and validation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to validate input fields
+            const validateField = function(input) {
+                const parent = input.closest('.form-group');
+                if (input.value.trim() !== '') {
+                    parent.classList.add('validated');
+                } else {
+                    parent.classList.remove('validated');
+                }
+            };
+            
+            // Add event listeners to all input fields
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+                
+                input.addEventListener('focus', function() {
+                    // Add a subtle animation
+                    this.style.transition = 'transform 0.2s ease';
+                    this.style.transform = 'scale(1.01)';
+                    
+                    // Find the label for this input
+                    const parent = this.closest('.form-group');
+                    const label = parent ? parent.querySelector('label') : null;
+                    if (label) {
+                        label.style.color = '#1c87b9';
+                        label.style.fontWeight = '600';
+                    }
+                });
+                
+                input.addEventListener('blur', function() {
+                    // Reset the animation
+                    this.style.transform = 'scale(1)';
+                    
+                    // Find the label for this input
+                    const parent = this.closest('.form-group');
+                    const label = parent ? parent.querySelector('label') : null;
+                    if (label) {
+                        label.style.color = '';
+                        label.style.fontWeight = '';
+                    }
+                });
+                
+                // Initial validation for pre-filled fields
+                validateField(input);
+            });
+            
+            // Ensure no scrollbar appears by adjusting content
+            const adjustContentHeight = function() {
+                const viewportHeight = window.innerHeight;
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const formTabsHeight = document.querySelector('.form-tabs').offsetHeight;
+                const buttonsHeight = document.querySelector('.action-buttons').offsetHeight;
+                const footerHeight = document.querySelector('.footer').offsetHeight;
+                
+                const availableHeight = viewportHeight - headerHeight - navHeight - formTabsHeight - buttonsHeight - footerHeight - 20; // 20px for margins
+                
+                document.querySelector('.form-content').style.maxHeight = availableHeight + 'px';
+            };
+            
+            // Adjust height on load and resize
+            adjustContentHeight();
+            window.addEventListener('resize', adjustContentHeight);
+        });
+    </script>
+</body>
+</html>

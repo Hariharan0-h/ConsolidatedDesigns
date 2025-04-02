@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System - Patient Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Premium color palette */
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #93c5fd;
+            --secondary: #f0f9ff;
+            
+            --text-dark: #1e293b;
+            --text-light: #475569;
+            --text-muted: #64748b;
+            
+            --border: #e2e8f0;
+            --border-focus: #93c5fd;
+            
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            
+            --panel-bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --header-bg: #f8fafc;
+            
+            /* Gradient backgrounds */
+            --gradient-primary: linear-gradient(135deg, #2563eb, #3b82f6);
+            --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+            --gradient-warning: linear-gradient(135deg, #f59e0b, #fbbf24);
+            --gradient-danger: linear-gradient(135deg, #ef4444, #f87171);
+            
+            /* Animation durations */
+            --anim-fast: 0.15s;
+            --anim-medium: 0.25s;
+            --anim-slow: 0.4s;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            line-height: 1.5;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 8px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            height: 48px; /* Reduced height */
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 16px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 28px; /* Smaller icon */
+            height: 28px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            font-size: 12px; /* Smaller font */
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 70%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-25deg);
+            transition: all 0.5s ease;
+        }
+        
+        .logo:hover .logo-icon::after {
+            left: 150%;
+        }
+        
+        .logo-text {
+            font-size: 14px; /* Smaller font */
+            font-weight: 600;
+            color: var(--text-dark);
+            position: relative;
+        }
+        
+        .date-display {
+            font-size: 12px; /* Smaller font */
+            color: var(--text-muted);
+            background-color: var(--secondary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--anim-medium) ease;
+        }
+        
+        .date-display:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Navigation Styles */
+        .nav-tabs {
+            display: flex;
+            background-color: var(--secondary);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: none;
+            position: sticky;
+            top: 48px; /* Adjusted to match header height */
+            z-index: 9;
+            box-shadow: var(--shadow-sm);
+            height: 36px; /* Reduced height */
+        }
+        
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-tab {
+            padding: 8px 16px; /* Reduced padding */
+            font-size: 12px; /* Smaller font */
+            font-weight: 500;
+            color: var(--text-light);
+            position: relative;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all var(--anim-medium) cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .nav-tab i {
+            transition: transform var(--anim-medium) ease;
+            font-size: 12px; /* Smaller icons */
+        }
+        
+        .nav-tab:hover i, .nav-tab.active i {
+            transform: scale(1.2);
+        }
+        
+        .nav-tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px; /* Thinner indicator */
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform var(--anim-medium) ease-out;
+        }
+        
+        .nav-tab.active::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        /* Registration Bar Styles */
+        .registration-bar {
+            background: linear-gradient(to right, #f1f5f9, #f0f9ff);
+            padding: 8px 12px; /* Reduced padding */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* Smaller gap */
+            align-items: flex-end;
+            box-shadow: var(--shadow-sm);
+            border-radius: 0 0 8px 8px;
+            border: 1px solid var(--border);
+            border-top: none;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .reg-field {
+            flex: 1;
+            min-width: 120px; /* Smaller min-width */
+            position: relative;
+            transition: transform var(--anim-medium) ease;
+        }
+        
+        .reg-field label {
+            display: block;
+            font-size: 10px; /* Smaller font */
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--text-light);
+            transition: color var(--anim-fast) ease;
+        }
+        
+        .reg-field select,
+        .reg-field input {
+            width: 100%;
+            padding: 6px 8px; /* Smaller padding */
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px; /* Smaller font */
+            color: var(--text-dark);
+            background-color: white;
+            transition: all var(--anim-medium) ease;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .reg-field select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+            background-size: 12px;
+            padding-right: 20px;
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            padding: 8px 12px 12px; /* Reduced padding */
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center align content */
+        }
+        
+        /* Form Card */
+        .form-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 16px; /* Reduced margin */
+            border: 1px solid var(--border);
+            transition: all var(--anim-medium) ease;
+            width: 90%; /* Set width to 90% of container */
+            max-width: 2000px; /* Maximum width */
+        }
+        
+        .form-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px); /* Smaller transformation */
+        }
+        
+        .form-section {
+            padding: 12px 16px; /* Reduced padding */
+            border-bottom: 1px solid var(--border);
+            transition: background-color var(--anim-medium) ease;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Smaller gap */
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 13px; /* Smaller font */
+            position: relative;
+        }
+        
+        .section-header i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; /* Smaller icon */
+            height: 24px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: 6px;
+            color: var(--primary);
+            transition: all var(--anim-medium) ease;
+            font-size: 12px; /* Smaller icon */
+        }
+        
+        .form-section:hover .section-header i {
+            transform: scale(1.1) rotate(5deg);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .photo-picker-icon {
+            position: absolute;
+            right: 0;
+            width: 28px; /* Smaller icon */
+            height: 28px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--anim-medium) ease;
+            box-shadow: var(--shadow-md);
+            color: white;
+            overflow: hidden;
+            font-size: 12px; /* Smaller icon */
+        }
+        
+        .photo-picker-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-25deg);
+            transition: all 0.5s ease;
+        }
+        
+        .photo-picker-icon:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .photo-picker-icon:hover::before {
+            left: 150%;
+        }
+        
+        /* Form Fields */
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Smaller gap */
+        }
+        
+        .form-field {
+            position: relative;
+            margin-bottom: 8px; /* Smaller margin */
+            flex: 1;
+            min-width: 120px; /* Smaller min-width */
+        }
+        
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 16px 10px 4px; /* Top padding to make room for label */
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px; /* Smaller font */
+            color: var(--text-dark);
+            background-color: white;
+            transition: all var(--anim-medium) ease;
+            box-shadow: var(--shadow-sm);
+            height: 42px; /* Reduced height */
+        }
+        
+        /* Hide placeholder when input is focused to prevent overlap with label */
+        .form-field input::placeholder {
+            color: transparent;
+        }
+        
+        /* Fix floating label positioning */
+        .form-field label {
+            position: absolute;
+            left: 10px;
+            top: 4px; /* Position at top initially */
+            font-size: 9px; /* Small font size */
+            color: var(--primary);
+            pointer-events: none;
+            transition: all var(--anim-medium) cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: white;
+            padding: 0 4px;
+            font-weight: 600;
+            /* Add a small white background to ensure text is readable */
+            background-color: white;
+            z-index: 2;
+        }
+        
+        /* Style for empty unfocused field labels */
+        .form-field input:placeholder-shown:not(:focus) ~ label,
+        .form-field select[value=""] ~ label {
+            top: 13px; /* Center vertically when empty */
+            font-size: 12px; /* Larger font when empty */
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+        
+        .form-field select {
+            background-position: right 6px center;
+            background-size: 12px;
+            padding-right: 24px;
+        }
+        
+        /* Checkbox styling */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px; /* Reduced margin */
+            position: relative;
+            padding-left: 4px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            position: relative;
+            cursor: pointer;
+            font-size: 12px; /* Smaller font */
+            padding-left: 22px; /* Adjusted for smaller checkbox */
+            line-height: 18px;
+            user-select: none;
+            color: var(--text-light);
+        }
+        
+        .checkbox-group label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 16px; /* Smaller checkbox */
+            height: 16px;
+            border: 2px solid var(--border);
+            background-color: white;
+            border-radius: 4px;
+        }
+        
+        .checkbox-group label:after {
+            content: '';
+            position: absolute;
+            left: 5px; /* Adjusted position */
+            top: 2px;
+            width: 4px; /* Smaller checkmark */
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) scale(0);
+            opacity: 0;
+        }
+        
+        /* Consent form area */
+        .consent-form {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.07), rgba(147, 197, 253, 0.1));
+            border-radius: 12px;
+            padding: 16px; /* Reduced padding */
+            text-align: center;
+            margin-bottom: 16px; /* Reduced margin */
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+            width: 90%; /* Match form card width */
+            max-width: 1200px; /* Maximum width */
+        }
+        
+        .consent-form h3 {
+            font-size: 14px; /* Smaller font */
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        
+        .consent-form p {
+            font-size: 12px; /* Smaller font */
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+        
+        .upload-btn {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary-light);
+            border-radius: 8px;
+            padding: 6px 12px; /* Reduced padding */
+            font-size: 12px; /* Smaller font */
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--anim-medium) ease;
+            box-shadow: var(--shadow-sm);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px; /* Smaller gap */
+            padding: 8px 0; /* Reduced padding */
+            width: 90%; /* Match form card width */
+            max-width: 1200px; /* Maximum width */
+        }
+        
+        .btn {
+            padding: 8px 12px; /* Reduced padding */
+            border-radius: 8px;
+            font-size: 12px; /* Smaller font */
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all var(--anim-medium) cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn i {
+            z-index: 2;
+            transition: transform var(--anim-medium) ease;
+        }
+        
+        .btn span {
+            z-index: 2;
+            position: relative;
+        }
+        
+        .btn:hover i {
+            transform: translateX(-3px);
+        }
+        
+        /* Toast animations */
+        @keyframes slideInToast {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOutToast {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(10%);
+            }
+        }
+        
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0; }
+        }
+        
+        .toast {
+            animation: slideInToast var(--anim-medium) ease, fadeOutToast 0.5s ease 3s forwards;
+        }
+        
+        .toast::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, var(--primary-light), var(--primary));
+            animation: toastProgress 3s linear forwards;
+        }
+        
+        /* Nav tab hover effects */
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(37, 99, 235, 0.05);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--anim-medium) ease-out;
+            z-index: -1;
+        }
+        
+        .nav-tab:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background-color: rgba(147, 197, 253, 0.1);
+            color: var(--primary-dark);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 10px;
+            text-align: left;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: linear-gradient(to right, #f8fafc, #f0f9ff);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.75);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px; /* Smaller max-width */
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 12px 16px; /* Reduced padding */
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #f8fafc, #f0f9ff);
+        }
+        
+        .modal-header h2 {
+            font-size: 16px; /* Smaller font */
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-dark);
+        }
+        
+        .modal-body {
+            padding: 16px; /* Reduced padding */
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 280px; /* Smaller max-width */
+        }
+        
+        .toast {
+            padding: 12px; /* Reduced padding */
+            border-radius: 8px;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            font-size: 12px; /* Smaller font */
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+        
+        .toast-message {
+            font-size: 11px; /* Smaller font */
+            color: var(--text-light);
+        }
+        
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .form-field, .reg-field {
+                min-width: 100%;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
+        }
+        
+        /* Make sure body fills viewport */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        
+        /* Custom scrollbar - thinner version */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+            border: 1px solid #f1f5f9;
+        }
+        
+        /* Make forms scrollable while keeping header, nav, and footer fixed */
+        .main-content {
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        /* Form animations for visibility */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .form-section {
+            animation: fadeIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toast-container">
+        <!-- Toast notifications will be dynamically added here -->
+    </div>
+    
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">AT</div>
+                <span class="logo-text">Hospital Management System</span>
+            </div>
+            <div class="date-display" id="currentDate">2 Apr. 2025</div>
+        </div>
+    </header>
+    
+    <nav class="nav-tabs">
+        <div class="nav-tab active">
+            <i class="fas fa-user"></i>
+            Patient Registration
+        </div>
+        <div class="nav-tab">
+            <i class="fas fa-file-medical"></i>
+            Documents
+        </div>
+        <div class="nav-tab">
+            <i class="fas fa-calendar-check"></i>
+            Appointments
+        </div>
+        <div class="nav-tab">
+            <i class="fas fa-pills"></i>
+            Medication
+        </div>
+        <div class="nav-tab">
+            <i class="fas fa-chart-line"></i>
+            Reports
+        </div>
+        <div class="nav-tab">
+            <i class="fas fa-cog"></i>
+            Settings
+        </div>
+    </nav>
+    
+    <div class="registration-bar">
+        <div class="reg-field">
+            <label for="patient-registration">Registration</label>
+            <select id="patient-registration">
+                <option value="">Select</option>
+                <option value="new" selected>New</option>
+                <option value="existing">Existing</option>
+            </select>
+        </div>
+        <div class="reg-field">
+            <label for="patient-instance">Instance</label>
+            <select id="patient-instance">
+                <option value="">Select</option>
+                <option value="outpatient" selected>Outpatient</option>
+                <option value="inpatient">Inpatient</option>
+                <option value="emergency">Emergency</option>
+            </select>
+        </div>
+        <div class="reg-field">
+            <label for="pay-free">Pay / Free</label>
+            <select id="pay-free">
+                <option value="">Select</option>
+                <option value="pay" selected>Paying</option>
+                <option value="free">Non-Paying</option>
+                <option value="insurance">Insurance</option>
+            </select>
+        </div>
+        <div class="reg-field">
+            <label for="patient-type">Type</label>
+            <select id="patient-type">
+                <option value="">Select</option>
+                <option value="general" selected>General</option>
+                <option value="vip">VIP</option>
+                <option value="staff">Staff</option>
+            </select>
+        </div>
+        <div class="reg-field">
+            <label for="uin">UIN</label>
+            <input type="text" id="uin" placeholder="ID Number">
+        </div>
+    </div>
+    
+    <div class="main-content container">
+        <div class="form-card">
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-user-circle"></i>
+                    Personal Information
+                    <div class="photo-picker-icon" id="photo-picker-btn">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="form-field">
+                        <input type="text" id="first-name" placeholder="First Name" required>
+                        <label for="first-name" class="required">First Name</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="last-name" placeholder="Last Name" required>
+                        <label for="last-name" class="required">Last Name</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="date" id="dob" placeholder="Date of Birth" required>
+                        <label for="dob" class="required">DOB</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="number" id="age" placeholder="Age" readonly>
+                        <label for="age">Age</label>
+                    </div>
+                    <div class="form-field">
+                        <select id="gender" required>
+                            <option value="" selected disabled></option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="gender" class="required">Gender</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Address Information
+                </div>
+                <div class="section-content">
+                    <div class="form-field">
+                        <input type="text" id="address-line" placeholder="Address Line">
+                        <label for="address-line">Address</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="city" placeholder="City" required>
+                        <label for="city" class="required">City</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="state" placeholder="State" required>
+                        <label for="state" class="required">State</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="pincode" placeholder="Pincode" required>
+                        <label for="pincode" class="required">Pincode</label>
+                    </div>
+                    <div class="form-field">
+                        <select id="country" required>
+                            <option value="" selected disabled></option>
+                            <option value="india">India</option>
+                            <option value="usa">United States</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="canada">Canada</option>
+                            <option value="australia">Australia</option>
+                        </select>
+                        <label for="country" class="required">Country</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-phone-alt"></i>
+                    Contact Information
+                </div>
+                <div class="section-content">
+                    <div class="form-field">
+                        <input type="tel" id="mobile" placeholder="Mobile Number" required>
+                        <label for="mobile" class="required">Mobile</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="email" id="email" placeholder="Email Address">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="aadhar" placeholder="XXXX-XXXX-XXXX">
+                        <label for="aadhar">Aadhar</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-clipboard-list"></i>
+                    Visit Information
+                </div>
+                <div class="section-content">
+                    <div class="form-field">
+                        <select id="purpose-visit" required>
+                            <option value="" selected disabled></option>
+                            <option value="regular">Regular Investigation</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="followup">Follow Up</option>
+                            <option value="referral">Referral</option>
+                        </select>
+                        <label for="purpose-visit" class="required">Purpose</label>
+                    </div>
+                    <div class="form-field">
+                        <select id="doctor">
+                            <option value="" selected disabled></option>
+                            <option value="dr-sharma">Dr. Sharma - Ophth</option>
+                            <option value="dr-patel">Dr. Patel - Cardio</option>
+                            <option value="dr-singh">Dr. Singh - Gen Med</option>
+                            <option value="dr-gupta">Dr. Gupta - Peds</option>
+                        </select>
+                        <label for="doctor">Doctor</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="assign-doctor">
+                        <label for="assign-doctor">Assign Doctor Now</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-rupee-sign"></i>
+                    Payment Information
+                </div>
+                <div class="section-content">
+                    <div class="form-field">
+                        <select id="patient-category" required>
+                            <option value="" selected disabled></option>
+                            <option value="full">FULL PAYMENT</option>
+                            <option value="partial">PARTIAL PAYMENT</option>
+                            <option value="free">FREE</option>
+                        </select>
+                        <label for="patient-category" class="required">Category</label>
+                    </div>
+                    <div class="form-field">
+                        <select id="payment-type">
+                            <option value="" selected disabled></option>
+                            <option value="cash">CASH</option>
+                            <option value="card">CARD</option>
+                            <option value="upi">UPI</option>
+                            <option value="insurance">INSURANCE</option>
+                        </select>
+                        <label for="payment-type">Payment Type</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="number" id="fees" placeholder="Fees" value="100">
+                        <label for="fees">Fees</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="health-insurance">
+                        <label for="health-insurance">Have health insurance?</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="consent-form">
+            <h3>Add a consent form</h3>
+            <p>Upload patient consent form</p>
+            <button class="upload-btn">
+                <i class="fas fa-upload"></i>
+                Upload Consent Form
+            </button>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-secondary">
+                <i class="fas fa-redo"></i>
+                <span>Reset</span>
+            </button>
+            <button class="btn btn-warning">
+                <i class="fas fa-print"></i>
+                <span>Print</span>
+            </button>
+            <button class="btn btn-danger">
+                <i class="fas fa-times"></i>
+                <span>Cancel</span>
+            </button>
+            <button class="btn btn-primary" id="submit-btn">
+                <i class="fas fa-save"></i>
+                <span>Submit</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Photo Upload Modal -->
+    <div class="modal" id="photo-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload Photo</h2>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="picture-upload">
+                    <i class="fas fa-camera"></i>
+                    <p>Click to upload photo</p>
+                    <input type="file" id="profile-picture" accept="image/*" style="display: none;">
+                </div>
+                <div id="preview-container" style="display: none;">
+                    <img id="image-preview">
+                    <div style="margin-top: 16px; display: flex; justify-content: center; gap: 16px;">
+                        <button class="btn btn-danger" id="remove-photo">
+                            <i class="fas fa-trash"></i> <span>Remove</span>
+                        </button>
+                        <button class="btn btn-primary" id="save-photo">
+                            <i class="fas fa-check"></i> <span>Use Photo</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 AuroiTech Hospital Management System</p>
+    </footer>
+    
+    <script>
+        // Update current date
+        function updateDate() {
+            const now = new Date();
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-GB', options);
+        }
+        updateDate();
+        
+        // Fix form field labels on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial states for all form fields with placeholders
+            const formFields = document.querySelectorAll('.form-field input, .form-field select');
+            
+            formFields.forEach(field => {
+                // Check if field has a value already
+                adjustLabelPosition(field);
+                
+                // Add event listeners for focus and blur
+                field.addEventListener('focus', function() {
+                    const label = this.nextElementSibling;
+                    if (label && label.tagName === 'LABEL') {
+                        label.style.top = '4px';
+                        label.style.fontSize = '9px';
+                        label.style.color = 'var(--primary)';
+                        label.style.fontWeight = '600';
+                    }
+                });
+                
+                field.addEventListener('blur', function() {
+                    adjustLabelPosition(this);
+                });
+                
+                field.addEventListener('input', function() {
+                    adjustLabelPosition(this);
+                });
+            });
+            
+            // For select elements, handle change events
+            const selects = document.querySelectorAll('.form-field select');
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    adjustLabelPosition(this);
+                });
+            });
+        });
+        
+        function adjustLabelPosition(field) {
+            const label = field.nextElementSibling;
+            if (!label || label.tagName !== 'LABEL') return;
+            
+            if (field.tagName === 'SELECT') {
+                // For select elements
+                if (field.value === '' && document.activeElement !== field) {
+                    label.style.top = '13px';
+                    label.style.fontSize = '12px';
+                    label.style.color = 'var(--text-muted)';
+                    label.style.fontWeight = 'normal';
+                } else {
+                    label.style.top = '4px';
+                    label.style.fontSize = '9px';
+                    label.style.color = 'var(--primary)';
+                    label.style.fontWeight = '600';
+                }
+            } else {
+                // For input elements
+                if (field.value === '' && document.activeElement !== field) {
+                    label.style.top = '13px';
+                    label.style.fontSize = '12px';
+                    label.style.color = 'var(--text-muted)';
+                    label.style.fontWeight = 'normal';
+                } else {
+                    label.style.top = '4px';
+                    label.style.fontSize = '9px';
+                    label.style.color = 'var(--primary)';
+                    label.style.fontWeight = '600';
+                }
+            }
+        }
+        
+        // Photo upload modal functionality
+        const photoPickerBtn = document.getElementById('photo-picker-btn');
+        const photoModal = document.getElementById('photo-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const fileInput = document.getElementById('profile-picture');
+        const pictureUpload = document.querySelector('.picture-upload');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removePhotoBtn = document.getElementById('remove-photo');
+        const savePhotoBtn = document.getElementById('save-photo');
+        
+        // Open modal
+        photoPickerBtn.addEventListener('click', function() {
+            photoModal.classList.add('active');
+            photoModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modal
+        closeModalBtn.addEventListener('click', closePhotoModal);
+        
+        // Close modal when clicking outside
+        photoModal.addEventListener('click', function(e) {
+            if (e.target === photoModal) {
+                closePhotoModal();
+            }
+        });
+        
+        function closePhotoModal() {
+            photoModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        
+        // Handle file upload
+        pictureUpload.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                showToast('Processing', 'Uploading image...', 'info');
+                
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    pictureUpload.style.display = 'none';
+                    previewContainer.style.display = 'block';
+                    showToast('Success', 'Image uploaded', 'success');
+                };
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        // Remove uploaded photo
+        removePhotoBtn.addEventListener('click', function() {
+            fileInput.value = '';
+            imagePreview.src = '';
+            previewContainer.style.display = 'none';
+            pictureUpload.style.display = 'block';
+            showToast('Removed', 'Photo removed', 'info');
+        });
+        
+        // Save photo and close modal
+        savePhotoBtn.addEventListener('click', function() {
+            photoPickerBtn.innerHTML = `<img src="${imagePreview.src}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            closePhotoModal();
+            showToast('Success', 'Photo updated', 'success');
+        });
+        
+        // Navigation tabs
+        const navTabs = document.querySelectorAll('.nav-tab');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                navTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.textContent.trim() !== 'Patient Registration') {
+                    showToast('Navigation', `${this.textContent.trim()} not available in demo`, 'warning');
+                }
+            });
+        });
+        
+        // Form submission with validation
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Simple validation
+            const requiredFields = document.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.style.borderColor = '#ef4444';
+                    
+                    field.addEventListener('input', function() {
+                        this.style.borderColor = '';
+                    }, { once: true });
+                }
+            });
+            
+            if (!isValid) {
+                showToast('Error', 'Please fill required fields', 'error');
+                return;
+            }
+            
+            // Show success
+            showToast('Success', 'Registration completed', 'success');
+            
+            // Clear form after delay
+            setTimeout(function() {
+                document.querySelectorAll('input:not([readonly]), select').forEach(field => {
+                    field.value = '';
+                });
+                
+                // Reset photo if exists
+                if (photoPickerBtn.querySelector('img')) {
+                    photoPickerBtn.innerHTML = '<i class="fas fa-camera"></i>';
+                }
+                
+                // Reset checkbox
+                document.getElementById('health-insurance').checked = false;
+                
+                showToast('Ready', 'Form reset for new patient', 'info');
+            }, 1500);
+        });
+        
+        // Toast notification system
+        function showToast(title, message, type) {
+            const toastContainer = document.getElementById('toast-container');
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            // Set icon based on type
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas fa-${icon}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            // Add to container
+            toastContainer.appendChild(toast);
+            
+            // Add event listener to close button
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Show welcome toast on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply initial animations
+            setTimeout(function() {
+                showToast('Welcome', 'Patient registration form loaded', 'info');
+            }, 500);
+            
+            // Setup input field animations
+            setupFormAnimations();
+        });
+        
+        // Setup animation effects for form interactions
+        function setupFormAnimations() {
+            // Animate section headers on hover
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach(section => {
+                section.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.section-header i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.1) rotate(5deg)';
+                        icon.style.backgroundColor = 'var(--primary)';
+                        icon.style.color = 'white';
+                    }
+                });
+                
+                section.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.section-header i');
+                    if (icon) {
+                        icon.style.transform = '';
+                        icon.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+                        icon.style.color = 'var(--primary)';
+                    }
+                });
+            });
+            
+            // Animate buttons on hover
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) icon.style.transform = 'translateX(-3px)';
+                    
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = 'var(--shadow-md)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) icon.style.transform = '';
+                    
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+            
+            // Special animation for primary button (pulsing effect)
+            const primaryBtn = document.querySelector('.btn-primary');
+            if (primaryBtn) {
+                let pulseAnim = primaryBtn.animate(
+                    [
+                        { transform: 'scale(1)' },
+                        { transform: 'scale(1.03)' },
+                        { transform: 'scale(1)' }
+                    ], 
+                    { 
+                        duration: 2000,
+                        iterations: Infinity,
+                        easing: 'ease-in-out'
+                    }
+                );
+            }
+        }
+    </script>
+</body>
+</html>
