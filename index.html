@@ -5,222 +5,848 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMS 2.0 Design Navigation</title>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #4ade80;
+            --text-color: #334155;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         
         body {
-            background-color: #f5f5f5;
-            padding: 40px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 0;
+            margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #333;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            color: #555;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            flex: 1;
-        }
-        
-        .tile {
-            height: 250px;
-            border-radius: 12px;
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 2rem;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
             text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
-            font-weight: bold;
+            padding: 5rem 2rem;
+            text-align: center;
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            text-align: center;
-            padding: 20px;
         }
         
-        .tile:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
         }
         
-        .tile:active {
-            transform: translateY(-2px);
-            transition: transform 0.1s ease;
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
         }
         
-        .tile-title {
-            font-size: 24px;
-            margin-bottom: 10px;
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
             position: relative;
             z-index: 2;
         }
         
-        .tile-description {
-            font-size: 14px;
+        .hero-subtitle {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
             opacity: 0.9;
             position: relative;
             z-index: 2;
-            font-weight: normal;
         }
         
-        /* Sap Green Theme Tile */
-        .sap-green {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        .main-content {
+            padding: 4rem 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--text-color);
             position: relative;
+            padding-bottom: 1rem;
         }
         
-        .sap-green::before {
+        .section-title::after {
             content: '';
             position: absolute;
-            width: 150px;
-            height: 150px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            top: -75px;
-            right: -75px;
-        }
-        
-        .sap-green::after {
-            content: '';
-            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100px;
-            height: 100px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            bottom: -50px;
-            left: -50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
         }
         
-        /* Grid Layout Theme Tile */
-        .grid-layout {
-            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
         
-        .grid-layout::after {
-            content: '';
-            position: absolute;
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-image svg {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+            transition: var(--transition);
         }
         
-        /* Blue Grey Theme Tile */
-        .blue-grey {
-            background-color: #607D8B;
+        .card:hover .card-image svg {
+            transform: scale(1.05);
+        }
+        
+        .card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            z-index: 5;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #1e293b;
+        }
+        
+        .card-text {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-author {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: auto;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-icon {
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon svg {
+            width: 60px;
+            height: 60px;
+            color: var(--primary-color);
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #1e293b;
+        }
+        
+        .feature-text {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        footer {
+            background-color: #1e293b;
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
             position: relative;
-            overflow: hidden;
+            padding-bottom: 0.75rem;
         }
         
-        .blue-grey::after {
+        .footer-section h3::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 100%;
-            height: 30%;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='rgba(255, 255, 255, 0.15)'%3E%3C/path%3E%3C/svg%3E");
-            background-size: cover;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
         }
         
-        /* Add some icons */
-        .tile-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
+        .footer-links {
+            list-style: none;
         }
         
-        /* Responsive improvements */
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                max-width: 500px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .tile {
-                height: 200px;
-            }
+        .footer-links li {
+            margin-bottom: 0.75rem;
         }
         
-        /* Footer */
-        .footer {
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-color);
+            padding-left: 5px;
+        }
+        
+        .copyright {
             text-align: center;
-            margin-top: 40px;
-            color: #777;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #cbd5e1;
             font-size: 0.9rem;
         }
+        
+        .theme-switcher {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            z-index: 100;
+            transition: var(--transition);
+        }
+        
+        .theme-switcher:hover {
+            transform: rotate(30deg);
+        }
+        
+        /* Dark mode */
+        .dark-mode {
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary-color: #10b981;
+            --text-color: #e2e8f0;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+        }
+        
+        .dark-mode .card-footer {
+            background-color: #1a2234;
+            border-color: #334155;
+        }
+        
+        .dark-mode .card-title {
+            color: #f1f5f9;
+        }
+        
+        .dark-mode .card-text,
+        .dark-mode .card-author {
+            color: #cbd5e1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+            
+            .features {
+                gap: 1rem;
+            }
+            
+            .main-content {
+                padding: 2rem 1rem;
+            }
+            
+            .footer-content {
+                gap: 2rem;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card, .feature {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .grid-container .card:nth-child(1) { animation-delay: 0.1s; }
+        .grid-container .card:nth-child(2) { animation-delay: 0.2s; }
+        .grid-container .card:nth-child(3) { animation-delay: 0.3s; }
+        .grid-container .card:nth-child(4) { animation-delay: 0.4s; }
+        
+        .features .feature:nth-child(1) { animation-delay: 0.2s; }
+        .features .feature:nth-child(2) { animation-delay: 0.3s; }
+        .features .feature:nth-child(3) { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>HMS 2.0 Designs Proposal</h1>
-        <p class="subtitle">Click the tiles below to navigate to different design templates and themes for the HMS 2.0 platform</p>
-    </div>
+    <nav class="navbar">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"></path>
+                <path d="M16 2v4"></path>
+                <path d="M8 2v4"></path>
+                <path d="M3 10h18"></path>
+                <path d="m9 16 2 2 4-4"></path>
+            </svg>
+            HMS 2.0
+        </div>
+        <div class="nav-links">
+            <a href="#">Dashboard</a>
+            <a href="#">Designs</a>
+            <a href="#">Team</a>
+            <a href="#">Documentation</a>
+        </div>
+    </nav>
     
-    <div class="container">
-        <!-- Sap Green Theme Tile -->
-        <a href="https://hariharan0-h.github.io/Dark-Red/" class="tile sap-green">
-            <div class="tile-icon">🔥</div>
-            <div class="tile-title">Dark Red Theme</div>
-            <p class="tile-description">Propsed a Dark theme that fits usable and common as per many users</p>
-            <p class="tile-description" style="margin-top: 10px; font-style: italic;">We can do this changes in themes</p>
-        </a>
+    <section class="hero">
+        <h1>HMS 2.0 Design System</h1>
+        <p class="hero-subtitle">Explore our design proposals for the next generation Hospital Management System. Choose the theme that best fits your needs.</p>
+        <a href="#themes" class="btn">View Designs</a>
+    </section>
+    
+    <div class="main-content">
+        <h2 class="section-title" id="themes">Theme Proposals</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto;">Our team has created multiple design options to accommodate different user preferences and accessibility needs. Browse through the options below and select the one that feels right for your hospital environment.</p>
         
-        <!-- Blue Grey Theme Tile -->
-        <a href="forms.html" class="tile blue-grey">
-            <div class="tile-icon">🔷</div>
-            <div class="tile-title">Blue Grey Theme</div>
-            <p class="tile-description">Professional color scheme with modern wave patterns for a sophisticated interface</p>
-        </a>
-
-        <a href="https://deepak-palpandi-developer.github.io/ihms/#/auth/sign-in" class="tile grid-layout">
-            <div class="tile-icon">📊</div>
-            <div class="tile-title">Multi Color Theme</div>
-            <p class="tile-description">Professional Theme as the user will be more comfortable with the color chaning options</p>
-            <p>by: Deepak Palpandi</p>
-        </a>
-
-        <a href="https://hariharan0-h.github.io/bluewave/" class="tile grid-layout">
-            <div class="tile-icon">🌊</div>
-            <div class="tile-title">Blue Wave Theme</div>
-            <p class="tile-description">Improved theme with responsive and animated screens for client pov</p>
-        </a>
+        <div class="grid-container">
+            <!-- Dark Red Theme Card -->
+            <div class="card">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="300" height="200" fill="#1a1a1a"/>
+                        <!-- Nav bar -->
+                        <rect width="300" height="40" fill="#2d2d2d"/>
+                        <circle cx="20" cy="20" r="6" fill="#ff4d4d"/>
+                        <rect x="40" y="15" width="60" height="10" rx="2" fill="#ff4d4d"/>
+                        <rect x="220" y="15" width="30" height="10" rx="2" fill="#ffffff" opacity="0.5"/>
+                        <rect x="260" y="15" width="30" height="10" rx="2" fill="#ffffff" opacity="0.5"/>
+                        
+                        <!-- Sidebar -->
+                        <rect width="60" height="160" y="40" fill="#2d2d2d"/>
+                        <circle cx="30" cy="65" r="10" fill="#ff4d4d"/>
+                        <rect x="15" y="85" width="30" height="5" rx="1" fill="#ffffff" opacity="0.7"/>
+                        <rect x="15" y="100" width="30" height="5" rx="1" fill="#ffffff" opacity="0.4"/>
+                        <rect x="15" y="115" width="30" height="5" rx="1" fill="#ffffff" opacity="0.4"/>
+                        <rect x="15" y="130" width="30" height="5" rx="1" fill="#ffffff" opacity="0.4"/>
+                        <rect x="15" y="145" width="30" height="5" rx="1" fill="#ffffff" opacity="0.4"/>
+                        
+                        <!-- Main content area -->
+                        <rect x="70" y="50" width="220" height="50" rx="5" fill="#2d2d2d"/>
+                        <rect x="80" y="60" width="120" height="10" rx="2" fill="#ff4d4d"/>
+                        <rect x="80" y="80" width="80" height="5" rx="1" fill="#ffffff" opacity="0.5"/>
+                        
+                        <!-- Cards -->
+                        <rect x="70" y="110" width="105" height="80" rx="5" fill="#2d2d2d"/>
+                        <rect x="80" y="120" width="50" height="8" rx="2" fill="#ff4d4d"/>
+                        <rect x="80" y="135" width="85" height="5" rx="1" fill="#ffffff" opacity="0.5"/>
+                        <rect x="80" y="145" width="85" height="5" rx="1" fill="#ffffff" opacity="0.5"/>
+                        <rect x="80" y="170" width="40" height="10" rx="2" fill="#ff4d4d"/>
+                        
+                        <rect x="185" y="110" width="105" height="80" rx="5" fill="#2d2d2d"/>
+                        <rect x="195" y="120" width="50" height="8" rx="2" fill="#ff4d4d"/>
+                        <rect x="195" y="135" width="85" height="5" rx="1" fill="#ffffff" opacity="0.5"/>
+                        <rect x="195" y="145" width="85" height="5" rx="1" fill="#ffffff" opacity="0.5"/>
+                        <rect x="195" y="170" width="40" height="10" rx="2" fill="#ff4d4d"/>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Dark Red Theme</h3>
+                    <p class="card-text">A sophisticated dark theme with red accents that reduces eye strain and provides excellent contrast. Perfect for extended use in varying light conditions.</p>
+                    <p class="card-author">By: Hariharan</p>
+                </div>
+                <div class="card-footer">
+                    <a href="https://hariharan0-h.github.io/Dark-Red/" class="btn">View Demo</a>
+                    <button class="btn btn-secondary">Details</button>
+                </div>
+            </div>
+            
+            <!-- Blue Grey Theme Card -->
+            <div class="card">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="300" height="200" fill="#eceff1"/>
+                        <!-- Wave pattern -->
+                        <path d="M0,180 C100,150 200,210 300,180 L300,200 L0,200 Z" fill="#607d8b" opacity="0.7"/>
+                        <path d="M0,190 C70,170 170,200 300,170 L300,200 L0,200 Z" fill="#78909c" opacity="0.5"/>
+                        
+                        <!-- Header -->
+                        <rect width="300" height="40" fill="#455a64"/>
+                        <rect x="20" y="15" width="50" height="10" rx="2" fill="#ffffff"/>
+                        <rect x="200" y="15" width="30" height="10" rx="2" fill="#b0bec5"/>
+                        <rect x="240" y="15" width="30" height="10" rx="2" fill="#b0bec5"/>
+                        
+                        <!-- Content -->
+                        <rect x="20" y="60" width="260" height="40" rx="4" fill="#ffffff"/>
+                        <rect x="30" y="70" width="100" height="8" rx="2" fill="#455a64"/>
+                        <rect x="30" y="85" width="60" height="5" rx="1" fill="#78909c"/>
+                        
+                        <!-- Cards -->
+                        <rect x="20" y="110" width="125" height="60" rx="4" fill="#ffffff"/>
+                        <rect x="30" y="120" width="60" height="8" rx="2" fill="#455a64"/>
+                        <rect x="30" y="135" width="105" height="5" rx="1" fill="#78909c"/>
+                        <rect x="30" y="145" width="65" height="5" rx="1" fill="#78909c"/>
+                        <rect x="105" y="155" width="30" height="8" rx="4" fill="#607d8b"/>
+                        
+                        <rect x="155" y="110" width="125" height="60" rx="4" fill="#ffffff"/>
+                        <rect x="165" y="120" width="60" height="8" rx="2" fill="#455a64"/>
+                        <rect x="165" y="135" width="105" height="5" rx="1" fill="#78909c"/>
+                        <rect x="165" y="145" width="65" height="5" rx="1" fill="#78909c"/>
+                        <rect x="240" y="155" width="30" height="8" rx="4" fill="#607d8b"/>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Blue Grey Theme</h3>
+                    <p class="card-text">Professional color scheme with modern wave patterns for a sophisticated interface. Designed for clarity and ease of use in busy clinical environments.</p>
+                    <p class="card-author">By: Hariharan</p>
+                </div>
+                <div class="card-footer">
+                    <a href="forms.html" class="btn">View Demo</a>
+                    <button class="btn btn-secondary">Details</button>
+                </div>
+            </div>
+            
+            <!-- Multi Color Theme Card -->
+            <div class="card">
+                <div class="card-image">
+                    <div class="card-badge">Customizable</div>
+                    <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="300" height="200" fill="#f5f5f5"/>
+                        
+                        <!-- Color palette selector -->
+                        <rect x="20" y="20" width="260" height="30" rx="15" fill="#ffffff"/>
+                        <circle cx="35" cy="35" r="10" fill="#3f51b5"/>
+                        <circle cx="65" cy="35" r="10" fill="#4caf50"/>
+                        <circle cx="95" cy="35" r="10" fill="#f44336"/>
+                        <circle cx="125" cy="35" r="10" fill="#ff9800"/>
+                        <circle cx="155" cy="35" r="10" fill="#9c27b0"/>
+                        <rect x="175" y="30" width="90" height="10" rx="5" fill="#e0e0e0"/>
+                        
+                        <!-- Dashboard elements -->
+                        <rect x="20" y="65" width="120" height="60" rx="8" fill="#3f51b5"/>
+                        <rect x="30" y="75" width="60" height="10" rx="2" fill="#ffffff"/>
+                        <rect x="30" y="90" width="100" height="5" rx="1" fill="#c5cae9"/>
+                        <rect x="30" y="105" width="40" height="10" rx="2" fill="#ffffff"/>
+                        
+                        <rect x="150" y="65" width="130" height="60" rx="8" fill="#4caf50"/>
+                        <rect x="160" y="75" width="60" height="10" rx="2" fill="#ffffff"/>
+                        <rect x="160" y="90" width="110" height="5" rx="1" fill="#c8e6c9"/>
+                        <rect x="160" y="105" width="40" height="10" rx="2" fill="#ffffff"/>
+                        
+                        <rect x="20" y="135" width="80" height="50" rx="8" fill="#f44336"/>
+                        <rect x="30" y="145" width="40" height="8" rx="2" fill="#ffffff"/>
+                        <rect x="30" y="158" width="60" height="4" rx="1" fill="#ffcdd2"/>
+                        <rect x="30" y="168" width="20" height="8" rx="4" fill="#ffffff"/>
+                        
+                        <rect x="110" y="135" width="80" height="50" rx="8" fill="#ff9800"/>
+                        <rect x="120" y="145" width="40" height="8" rx="2" fill="#ffffff"/>
+                        <rect x="120" y="158" width="60" height="4" rx="1" fill="#ffe0b2"/>
+                        <rect x="120" y="168" width="20" height="8" rx="4" fill="#ffffff"/>
+                        
+                        <rect x="200" y="135" width="80" height="50" rx="8" fill="#9c27b0"/>
+                        <rect x="210" y="145" width="40" height="8" rx="2" fill="#ffffff"/>
+                        <rect x="210" y="158" width="60" height="4" rx="1" fill="#e1bee7"/>
+                        <rect x="210" y="168" width="20" height="8" rx="4" fill="#ffffff"/>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Multi Color Theme</h3>
+                    <p class="card-text">Flexible theme with color-changing options to accommodate user preferences and accessibility needs. Adapts to individual workflows.</p>
+                    <p class="card-author">By: Deepak Palpandi</p>
+                </div>
+                <div class="card-footer">
+                    <a href="https://deepak-palpandi-developer.github.io/ihms/#/auth/sign-in" class="btn">View Demo</a>
+                    <button class="btn btn-secondary">Details</button>
+                </div>
+            </div>
+            
+            <!-- Blue Wave Theme Card -->
+            <div class="card">
+                <div class="card-image">
+                    <div class="card-badge">Animated</div>
+                    <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#2196f3" />
+                                <stop offset="100%" stop-color="#0d47a1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <rect width="300" height="200" fill="#e3f2fd"/>
+                        
+                        <!-- Wave pattern -->
+                        <path d="M0,140 C50,120 100,160 150,140 C200,120 250,160 300,140 L300,200 L0,200 Z" fill="url(#blueGradient)" opacity="0.7">
+                            <animate attributeName="d" 
+                                     values="M0,140 C50,120 100,160 150,140 C200,120 250,160 300,140 L300,200 L0,200 Z;
+                                             M0,140 C50,160 100,120 150,160 C200,140 250,120 300,140 L300,200 L0,200 Z;
+                                             M0,140 C50,120 100,160 150,140 C200,120 250,160 300,140 L300,200 L0,200 Z" 
+                                     dur="10s" 
+                                     repeatCount="indefinite" />
+                        </path>
+                        
+                        <!-- Header -->
+                        <rect width="300" height="40" fill="#1976d2"/>
+                        <rect x="20" y="15" width="50" height="10" rx="2" fill="#ffffff"/>
+                        <rect x="200" y="15" width="30" height="10" rx="2" fill="#bbdefb"/>
+                        <rect x="240" y="15" width="30" height="10" rx="2" fill="#bbdefb"/>
+                        
+                        <!-- Content -->
+                        <!-- Content -->
+                        <rect x="20" y="60" width="260" height="40" rx="4" fill="#ffffff"/>
+                        <rect x="30" y="70" width="100" height="8" rx="2" fill="#1976d2"/>
+                        <rect x="30" y="85" width="60" height="5" rx="1" fill="#64b5f6"/>
+                        
+                        <!-- Cards -->
+                        <rect x="20" y="110" width="125" height="60" rx="4" fill="#ffffff"/>
+                        <rect x="30" y="120" width="60" height="8" rx="2" fill="#1976d2"/>
+                        <rect x="30" y="135" width="105" height="5" rx="1" fill="#64b5f6"/>
+                        <rect x="30" y="145" width="65" height="5" rx="1" fill="#64b5f6"/>
+                        <rect x="105" y="155" width="30" height="8" rx="4" fill="#1976d2"/>
+                        
+                        <rect x="155" y="110" width="125" height="60" rx="4" fill="#ffffff"/>
+                        <rect x="165" y="120" width="60" height="8" rx="2" fill="#1976d2"/>
+                        <rect x="165" y="135" width="105" height="5" rx="1" fill="#64b5f6"/>
+                        <rect x="165" y="145" width="65" height="5" rx="1" fill="#64b5f6"/>
+                        <rect x="240" y="155" width="30" height="8" rx="4" fill="#1976d2"/>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Blue Wave Theme</h3>
+                    <p class="card-text">Calming blue interface with animated wave patterns for a soothing experience. Designed to reduce stress for both patients and healthcare providers.</p>
+                    <p class="card-author">By: Hariharan</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn">View Demo</a>
+                    <button class="btn btn-secondary">Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Key Features</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Clear Documentation</h3>
+                <p class="feature-text">Comprehensive guides and documentation to help you implement and customize the design system for your specific needs.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="22"></line>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Accessibility First</h3>
+                <p class="feature-text">All themes meet WCAG 2.1 AA standards and are designed with accessibility in mind, ensuring an inclusive experience for all users.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path>
+                        <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+                        <line x1="12" y1="16" x2="12" y2="16"></line>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Responsive Design</h3>
+                <p class="feature-text">Fully responsive layouts that work seamlessly across desktop, tablet, and mobile devices for consistent access to critical information.</p>
+            </div>
+        </div>
     </div>
     
-    <div class="footer">
-        <p>HMS 2.0 2025 - Interns Team</p>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>HMS 2.0</h3>
+                <p>Next generation Hospital Management System designed to improve patient care and streamline clinical workflows.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Design System</a></li>
+                    <li><a href="#">Components</a></li>
+                    <li><a href="#">Documentation</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Getting Started</a></li>
+                    <li><a href="#">Best Practices</a></li>
+                    <li><a href="#">Component Library</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Feedback</a></li>
+                    <li><a href="#">Request Features</a></li>
+                    <li><a href="#">Report Issues</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2025 HMS 2.0 Design System. All rights reserved.
+        </div>
+    </footer>
+    
+    <div class="theme-switcher" id="themeSwitcher">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
     </div>
+    
+    <script>
+        // Theme switcher functionality
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        themeSwitcher.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            // You could save preference in localStorage here
+        });
+        
+        // Animation on scroll (simplified version)
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card, .feature');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
