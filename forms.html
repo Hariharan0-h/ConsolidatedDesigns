@@ -14,6 +14,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            font-size: 12px;
         }
 
         body {
@@ -29,8 +30,8 @@
             background: linear-gradient(90deg, #e5e8ec 0%, #dfeaf4 100%);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 0.8rem 1rem;
-            height: 90px;
-            border-bottom: 1px solid #e2e8f0;
+            height: 70px;
+            border-bottom: 5px solid #7c9ac2;
         }
 
         .header-content {
@@ -51,7 +52,7 @@
         }
 
         .logo-text {
-            font-size: 1.1rem;
+            font-size: 18px;
             font-weight: 600;
             color: #334155;
         }
@@ -85,7 +86,7 @@
             border-bottom: 2px solid transparent;
             font-weight: 500;
             color: #64748b;
-            font-size: 0.8rem;
+            font-size: 15px;
             height: 100%;
         }
 
@@ -96,11 +97,11 @@
         }
 
         .nav-tab i {
-            font-size: 0.95rem;
+            font-size: 15px;
         }
         
         .nav-text {
-            font-size: 0.75rem;
+            font-size: 15px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -116,7 +117,7 @@
             }
             
             .nav-tab i {
-                font-size: 1rem;
+                font-size: 15px;
             }
         }
 
@@ -126,7 +127,7 @@
             flex: 1;
         }
 
-        /* Form Container Wrapper - NEW */
+        /* Form Container Wrapper */
         .all-form-groups {
             background-color: white;
             border-radius: 8px;
@@ -157,8 +158,36 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 12px;
             height: 32px;
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 10;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .dropdown-options.show {
+            display: block;
+        }
+
+        .dropdown-option {
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+
+        .dropdown-option:hover {
+            background-color: #f1f5f9;
         }
 
         /* Form Groups */
@@ -202,7 +231,7 @@
         .form-field label {
             display: block;
             margin-bottom: 3px;
-            font-size: 0.8rem;
+            font-size: 12px;
             color: #64748b;
         }
 
@@ -212,7 +241,7 @@
             padding: 6px 8px;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
-            font-size: 0.85rem;
+            font-size: 12px;
             height: 32px;
         }
 
@@ -247,7 +276,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.85rem;
+            font-size: 12px;
         }
 
         .btn-primary {
@@ -277,8 +306,8 @@
             padding: 0.8rem;
             background-color: #152349;
             color: white;
-            font-size: 0.85rem;
-            height: 70px;
+            font-size: 12px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -289,6 +318,10 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .checkbox-container label {
+            font-size: 12px;
         }
 
         /* Tooltip for icons */
@@ -306,9 +339,139 @@
             color: white;
             padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 12px;
             white-space: nowrap;
             z-index: 100;
+        }
+
+        /* Action icons in form fields */
+        .form-field-with-actions {
+            position: relative;
+        }
+
+        .form-field-actions {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Form field with icons */
+        .form-field-with-icons {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-field-actions-icons {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 5px; /* Setting gap between icons to exactly 3px as requested */
+        }
+
+        .form-field-action {
+            cursor: pointer;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-field-action:hover {
+            color: #3b82f6;
+        }
+
+        .input-with-actions {
+            padding-right: 60px !important;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 20px;
+            color: #64748b;
+        }
+
+        .camera-container {
+            width: 100%;
+            height: 300px;
+            background-color: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .camera-placeholder {
+            font-size: 48px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        #camera-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #captured-image {
+            max-width: 100%;
+            max-height: 280px;
+            display: none;
+        }
+
+        .capture-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .info-modal-content {
+            max-height: 400px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -363,31 +526,57 @@
             <!-- Top Form Fields -->
             <div class="form-container">
                 <div class="dropdown-container">
-                    <div class="dropdown-field">
+                    <div class="dropdown-field" onclick="toggleDropdown(this)">
                         <span>New Registration</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" onclick="selectOption(this)">New Registration</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Update Registration</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Temporary Registration</div>
+                    </div>
                 </div>
                 <div class="dropdown-container">
-                    <div class="dropdown-field">
+                    <div class="dropdown-field" onclick="toggleDropdown(this)">
                         <span>Outpatient</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" onclick="selectOption(this)">Outpatient</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Inpatient</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Emergency</div>
+                    </div>
                 </div>
                 <div class="dropdown-container">
-                    <div class="dropdown-field">
+                    <div class="dropdown-field" onclick="toggleDropdown(this)">
                         <span>Paying</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" onclick="selectOption(this)">Paying</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Insurance</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Free</div>
+                    </div>
                 </div>
                 <div class="dropdown-container">
-                    <div class="dropdown-field">
+                    <div class="dropdown-field" onclick="toggleDropdown(this)">
                         <span>General</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" onclick="selectOption(this)">General</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">Priority</div>
+                        <div class="dropdown-option" onclick="selectOption(this)">VIP</div>
+                    </div>
                 </div>
                 <input type="text" placeholder="UIN (Unique ID Number)" class="form-field" style="height: 32px; padding: 6px 8px;">
-                <input type="text" placeholder="MRN (Medical Record Number)" class="form-field" style="height: 32px; padding: 6px 8px;">
+                <div class="form-field-with-icons">
+                    <input type="text" placeholder="MRN (Medical Record Number)" style="height: 32px; padding: 6px 8px; width: 80%;">
+                    <div class="form-field-actions-icons">
+                        <i class="fas fa-info-circle form-field-action" onclick="showInfoModal('Additional Info Tab Can be navigated from here.')"></i>
+                        <i class="fas fa-camera form-field-action" onclick="openCameraModal('MRN Photo')"></i>
+                    </div>
+                </div>
             </div>
             
             <!-- Personal Information -->
@@ -643,5 +832,201 @@
     <footer>
         <p>© 2025 AuroiTech Hospital Management System</p>
     </footer>
-</body>
-</html>
+
+    <!-- Camera Modal -->
+    <div class="modal" id="camera-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Take Photo for <span id="camera-field-name">Document</span></div>
+                <div class="modal-close" onclick="closeCameraModal()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="camera-container">
+                <video id="camera-video" autoplay playsinline></video>
+                <img id="captured-image" alt="Captured Image">
+                <div id="camera-placeholder" class="camera-placeholder">
+                    <i class="fas fa-camera"></i>
+                    <p>Camera access required</p>
+                </div>
+            </div>
+            <div class="capture-actions">
+                <button class="btn btn-primary" id="start-camera-btn">
+                    <i class="fas fa-video"></i> Start Camera
+                </button>
+                <button class="btn btn-primary" id="capture-btn" style="display:none">
+                    <i class="fas fa-camera"></i> Capture
+                </button>
+                <button class="btn btn-secondary" id="retake-btn" style="display:none">
+                    <i class="fas fa-redo"></i> Retake
+                </button>
+                <button class="btn btn-primary" id="save-photo-btn" style="display:none">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Modal -->
+    <div class="modal" id="info-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="info-modal-title">Information</div>
+                <div class="modal-close" onclick="closeInfoModal()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="info-modal-content" id="info-modal-content">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dropdown functionality
+        function toggleDropdown(element) {
+            const dropdownOptions = element.nextElementSibling;
+            
+            // Close all other dropdowns first
+            document.querySelectorAll('.dropdown-options.show').forEach(dropdown => {
+                if (dropdown !== dropdownOptions) {
+                    dropdown.classList.remove('show');
+                }
+            });
+            
+            // Toggle the clicked dropdown
+            dropdownOptions.classList.toggle('show');
+        }
+        
+        function selectOption(element) {
+            const value = element.textContent;
+            const dropdownField = element.closest('.dropdown-container').querySelector('.dropdown-field span');
+            dropdownField.textContent = value;
+            element.closest('.dropdown-options').classList.remove('show');
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown-container')) {
+                document.querySelectorAll('.dropdown-options').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+        
+        // Camera Modal functionality
+        let stream = null;
+        let videoTrack = null;
+        const videoElement = document.getElementById('camera-video');
+        const capturedImage = document.getElementById('captured-image');
+        const cameraPlaceholder = document.getElementById('camera-placeholder');
+        const cameraModal = document.getElementById('camera-modal');
+        const fieldNameElement = document.getElementById('camera-field-name');
+        const startCameraBtn = document.getElementById('start-camera-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const retakeBtn = document.getElementById('retake-btn');
+        const savePhotoBtn = document.getElementById('save-photo-btn');
+        
+        function openCameraModal(fieldName) {
+            fieldNameElement.textContent = fieldName;
+            cameraModal.classList.add('show');
+            videoElement.style.display = 'none';
+            capturedImage.style.display = 'none';
+            cameraPlaceholder.style.display = 'flex';
+            startCameraBtn.style.display = 'block';
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'none';
+            savePhotoBtn.style.display = 'none';
+        }
+        
+        function closeCameraModal() {
+            cameraModal.classList.remove('show');
+            stopCamera();
+        }
+        
+        startCameraBtn.addEventListener('click', async function() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoTrack = stream.getVideoTracks()[0];
+                videoElement.srcObject = stream;
+                videoElement.style.display = 'block';
+                cameraPlaceholder.style.display = 'none';
+                startCameraBtn.style.display = 'none';
+                captureBtn.style.display = 'block';
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Unable to access camera. Please check your permissions.');
+            }
+        });
+        
+        captureBtn.addEventListener('click', function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            canvas.getContext('2d').drawImage(videoElement, 0, 0);
+            capturedImage.src = canvas.toDataURL('image/png');
+            
+            videoElement.style.display = 'none';
+            capturedImage.style.display = 'block';
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'block';
+            savePhotoBtn.style.display = 'block';
+            
+            stopCamera();
+        });
+        
+        retakeBtn.addEventListener('click', async function() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoTrack = stream.getVideoTracks()[0];
+                videoElement.srcObject = stream;
+                
+                videoElement.style.display = 'block';
+                capturedImage.style.display = 'none';
+                retakeBtn.style.display = 'none';
+                savePhotoBtn.style.display = 'none';
+                captureBtn.style.display = 'block';
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Unable to access camera. Please check your permissions.');
+            }
+        });
+        
+        savePhotoBtn.addEventListener('click', function() {
+            // In a real application, you would save the image data to the server
+            // For this demo, we just close the modal and show a success message
+            alert(`Photo for ${fieldNameElement.textContent} has been saved!`);
+            closeCameraModal();
+        });
+        
+        function stopCamera() {
+            if (videoTrack) {
+                videoTrack.stop();
+                videoTrack = null;
+            }
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        }
+        
+        // Info Modal functionality
+        const infoModal = document.getElementById('info-modal');
+        const infoModalTitle = document.getElementById('info-modal-title');
+        const infoModalContent = document.getElementById('info-modal-content');
+        
+        function showInfoModal(title, content) {
+            infoModalTitle.textContent = title;
+            infoModalContent.innerHTML = content;
+            infoModal.classList.add('show');
+        }
+        
+        function closeInfoModal() {
+            infoModal.classList.remove('show');
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target === cameraModal) {
+                closeCameraModal();
+            } else if (event.target === infoModal) {
+                closeInfoModal();
+            }
+        };
+    </script>
