@@ -574,7 +574,7 @@
                 <div class="form-field-with-icons">
                     <input type="text" placeholder="MRN (Medical Record Number)" style="height: 32px; padding: 6px 8px; width: 80%;">
                     <div class="form-field-actions-icons">
-                        <i class="fas fa-info-circle form-field-action" onclick="showInfoModal('Additional Info Tab Can be navigated from here.')"></i>
+                        <i class="fas fa-info-circle form-field-action" onclick="openReg()"></i>
                         <i class="fas fa-camera form-field-action" onclick="openCameraModal('MRN Photo')"></i>
                     </div>
                 </div>
@@ -757,7 +757,7 @@
                     </div>
                     <div class="form-field">
                         <label>Manage Consent</label>
-                        <button class="btn btn-outlined">
+                        <button class="btn btn-outlined" onclick="showInfoModal('Consent form goes here, either new form can be filled or existing can be uploaded')">
                             <i class="fas fa-file-signature"></i> Manage Consent
                         </button>
                     </div>
@@ -939,6 +939,10 @@
         function closeCameraModal() {
             cameraModal.classList.remove('show');
             stopCamera();
+        }
+
+        function openReg() {
+            window.location = 'reg.html'
         }
         
         startCameraBtn.addEventListener('click', async function() {
